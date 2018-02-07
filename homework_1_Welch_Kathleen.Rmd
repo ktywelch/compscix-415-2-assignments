@@ -35,6 +35,7 @@ Question 3 plot ....
 WorldCities %>% ggplot(aes(x = population)) + 
   geom_histogram()
 
+<<<<<<< HEAD
 
 ```
 Question 4
@@ -43,5 +44,7 @@ Question 4
 WorldCities %>% ggplot(aes(x = population)) + 
   geom_histogram()+ggtitle('Population of World Cities')+ xlab('Cities Population')+ ylab('Count of Cities')
 
+=======
+>>>>>>> bd412cd8e5a045930ed6c2cb3b4ebf0d3b12eda0
 
 ``` 

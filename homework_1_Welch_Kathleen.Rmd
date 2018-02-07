@@ -18,6 +18,7 @@ data("WorldCities")
 glimpse(WorldCities)
 WorldCities <- head(WorldCities, 200)
 ```
+Question 2
 ```{r}
 country_col <- WorldCities$country
 unique(country_col)
@@ -29,9 +30,18 @@ country_col <- select(WorldCities, country)
 country_col <- WorldCities %>% select(country)
 WorldCities %>% select(region) %>% head(5)
 ```
+Question 3 plot ....
 ``` {r}
 WorldCities %>% ggplot(aes(x = population)) + 
   geom_histogram()
+
+
+```
+Question 4
+``` {r}
+
+WorldCities %>% ggplot(aes(x = population)) + 
+  geom_histogram()+ggtitle('Population of World Cities')+ xlab('Cities Population')+ ylab('Count of Cities')
 
 
 ``` 

@@ -16,8 +16,15 @@ ggplot(data = mpg)
 mpg
 ```
 
-  Question3 - What does the drv variable describe? Read the help for ?mpg to find out.
+  Question 3 - What does the drv variable describe? 
+  The drive of the car front wheel, rear wheel or 4 wheel.
+ 
 ```{r}
 ?mpg
+```
+  Question 4 - Make a scatterplot of hwy vs cyl.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(y = cyl, x = hwy))
 ```
   

@@ -17,12 +17,21 @@ data("WorldCities")
 ?WorldCities
 glimpse(WorldCities)
 WorldCities <- head(WorldCities, 200)
-
+```
+```{r}
 country_col <- WorldCities$country
 unique(country_col)
 
 region_col <- WorldCities$region
 unique(region_col)
+
+country_col <- select(WorldCities, country)
+country_col <- WorldCities %>% select(country)
+WorldCities %>% select(region) %>% head(5)
+```
+``` {r}
+WorldCities %>% ggplot(aes(x = population)) + 
+  geom_histogram()
 
 
 ``` 

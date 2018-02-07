@@ -1,0 +1,28 @@
+---
+title: "COMPSCIX 415.2 Homework 1"
+author: "Kathleen Welch"
+date: "January 30, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+My Github repository for my assignments can be found at this URL: https://github.com/ktywelch/compscix-415-2-assignments.git
+
+```{r load_packages, warning=FALSE, message=FALSE} 
+library(mdsr)
+library(tidyverse)
+data("WorldCities")
+?WorldCities
+glimpse(WorldCities)
+WorldCities <- head(WorldCities, 200)
+
+country_col <- WorldCities$country
+unique(country_col)
+
+region_col <- WorldCities$region
+unique(region_col)
+
+
+``` 

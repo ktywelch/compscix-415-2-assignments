@@ -27,4 +27,195 @@ mpg
 ggplot(data = mpg) + 
   geom_point(mapping = aes(y = cyl, x = hwy))
 ```
+    Question 4 -What happens if you make a scatterplot of class vs drv? it points the type of vechile to the drive - in a plot view.
+    Why is the plot not useful?  It is not really useful because there is no relation - a count of drive values to the class would make more sense.
+    ```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(y = class, x = drv))
+```
+  Section 3.3.1
+  Question 1 -
+  What’s gone wrong with this code? 
+  gplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
   
+  The aesethic color is not a not associated with a variable if you wanted to have colors based on class for example modify syntax to color = class.
+  
+  Why are the points not blue?
+  The points are not blue because if you wanted that to be the case the correct syntax would be 
+  gplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+  so that the color doesn’t relate to a variable but is the color to be used for all plotting.
+  
+  Question 2 -
+  Which variables in mpg are categorical? Which variables are continuous? (Hint: type ?mpg to read the documentation for the dataset). How can you see this information when you run mpg?
+Based on the documentation categorical have fixed values that are drop down - based on the docs that would be drv and class.
+```{r}
+?mpg
+```
+  
+  Categorical:
+  drv
+  class
+  year
+  fl
+  cyl
+  trans
+  
+  Continous:
+  hwy
+  cty
+  displ
+  
+
+Question 3
+Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
+They show differenct stories and how data is distributed looks different. 
+```{r}
+?mpg
+p <- ggplot(mpg, aes(year,hwy))
+p + geom_point(aes(color = drv))
+```
+Question 4
+What happens if you map the same variable to multiple aesthetics?
+Both are applied
+```{r}
+ ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = year, y = hwy, color = drv, shape=drv)) 
+```
+Question 5 -
+What does stroke do it supports over plotting scatter on numberic value.
+
+
+```{r}
+ ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = cyl, y = trans, color=class, stroke = cyl)) 
+?geom_point
+```
+Question 6
+What happens if you map an aesthetic to something other than a variable name, like aes(colour = displ < 5)?  It evaluates the expression and in this case returns true or false values.
+```{r}
+ ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = cyl, y = trans, color =displ < 5  )) 
+
+```
+Section 3.5.1: 
+#4
+What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?  It breaks the data down into more manageable chunks in this case classifying them by class and putting in 2 rows
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+#5
+Read ?facet_wrap. What does nrow do? What does ncol do? What other options control the layout of the individual panels? Why doesn’t facet_grid() have nrow and ncol argument?
+?facet_wrap - splits the data into multiple chunks by to make better use of viewing screen.
+nrow - specifies number of rows
+ncol - number of columns
+Why doesn’t facet_grid() have nrow and ncol argument? need hellp with this one,..
+
+```{r}
+?facet_wrap
+?facet_grid
+?geom_a
+```
+
+  
+Section 3.6.1: #1-5. 
+#1
+What geom would you use to draw a line chart? 
+geom_line
+A boxplot? 
+geom_boxplot
+A histogram?
+geom_hitogram
+An area chart?
+geom_area
+
+#2
+Point map with smooth line 
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE, show.legend = FALSE)
+```
+#3
+What does show.legend = FALSE do? 
+It removed the legend message associated with that geom.
+What happens if you remove it?
+The dash associated with the line is not seen in the legend
+Why do you think I used it earlier in the chapter?
+It was not needed and could confuse the viewer 
+
+#4
+What does the se argument to geom_smooth() do? displays the confidence level (the grey shadow) if it is false does not display.
+
+```{r}
+?geom_smooth
+```
+
+#5
+Will these two graphs look different? Why/why not?
+No they should be the same they are different syntax to achieve the same goal.
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+#6
+first Graph
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+```
+Second Graph
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, line=drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+```
+3rd Graph
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color=drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+```
+4th Graph
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy,)) + 
+  geom_point(mapping = aes(color = drv)) + 
+  geom_smooth(se = FALSE)
+
+```
+5th Graph
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color=drv, linetype=drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+```
+6th Graph
+```{r}
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color=drv)) + geom_point(shape = 20, color="white", size = 2, stroke = 3)+
+geom_point(shape = 20, size = 1, stroke = 2) 
+
+```
+
+3.7.1: 
+#2
+geom_col uses height values
+geom_bar uses proportional data
+
+Question on what is a Data Scientist -
+I would not have used the bar chart ... in the first picture stories is confusing it looks like there is only 1% less than available talent unless you read all the stats - if you use  pie chart use colors..
+In th holw article it is hard to tell what the story is the use of black and blue doesn't really present a picture of what they are trying to say.

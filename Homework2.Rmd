@@ -3,38 +3,42 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-```{r}
-library(tidyverse)
-```
+
 Section 3.2.4
-  Question 1- Run ggplot(data = mpg). What do you see? Nothing
+#1 1- Run ggplot(data = mpg). What do you see? Nothing
 ```{r}
 ggplot(data = mpg)
 ```
-  Question 2 - How many rows are in mpg? 234  How many columns? 11(
-```{r}
+#2 - How many rows are in mpg? 234  How many columns? 11
+---  
 mpg
+Format
+
+A data frame with 234 rows and 11 variables
+----
+```{r}
+?mpg
 ```
 
-  Question 3 - What does the drv variable describe? 
+#3 - What does the drv variable describe? 
   The drive of the car front wheel, rear wheel or 4 wheel.
  
 ```{r}
 ?mpg
 ```
-  Question 4 - Make a scatterplot of hwy vs cyl.
+#4 - Make a scatterplot of hwy vs cyl.
 ```{r}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(y = cyl, x = hwy))
 ```
-    Question 4 -What happens if you make a scatterplot of class vs drv? it points the type of vechile to the drive - in a plot view.
+#4 -What happens if you make a scatterplot of class vs drv? it points the type of vechile to the drive - in a plot view.
     Why is the plot not useful?  It is not really useful because there is no relation - a count of drive values to the class would make more sense.
     ```{r}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(y = class, x = drv))
 ```
-  Section 3.3.1
-  Question 1 -
+Section 3.3.1
+#1  -
   What’s gone wrong with this code? 
   gplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
@@ -47,7 +51,7 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
   so that the color doesn’t relate to a variable but is the color to be used for all plotting.
   
-  Question 2 -
+#2 -
   Which variables in mpg are categorical? Which variables are continuous? (Hint: type ?mpg to read the documentation for the dataset). How can you see this information when you run mpg?
 Based on the documentation categorical have fixed values that are drop down - based on the docs that would be drv and class.
 ```{r}
@@ -68,7 +72,7 @@ Based on the documentation categorical have fixed values that are drop down - ba
   displ
   
 
-Question 3
+#3
 Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
 They show differenct stories and how data is distributed looks different. 
 ```{r}
@@ -76,14 +80,14 @@ They show differenct stories and how data is distributed looks different.
 p <- ggplot(mpg, aes(year,hwy))
 p + geom_point(aes(color = drv))
 ```
-Question 4
+#4
 What happens if you map the same variable to multiple aesthetics?
 Both are applied
 ```{r}
  ggplot(data = mpg) + 
   geom_point(mapping = aes(x = year, y = hwy, color = drv, shape=drv)) 
 ```
-Question 5 -
+#5 -
 What does stroke do it supports over plotting scatter on numberic value.
 
 
@@ -92,7 +96,7 @@ What does stroke do it supports over plotting scatter on numberic value.
   geom_point(mapping = aes(x = cyl, y = trans, color=class, stroke = cyl)) 
 ?geom_point
 ```
-Question 6
+#6
 What happens if you map an aesthetic to something other than a variable name, like aes(colour = displ < 5)?  It evaluates the expression and in this case returns true or false values.
 ```{r}
  ggplot(data = mpg) + 

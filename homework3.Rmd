@@ -7,4 +7,244 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
+3.8.1
+#1
+What is the problem with this plot?
+The plot shows mpg in city and hwy but the points don't indicate car class or fuel type so no variable to differenciate the cars.
+How could you improve it?
+  Adding a color with one of the categories would make the data more meaningful
+
+```{r, fig.align='center',message=FALSE,warning=FALSE}
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color=class)) + 
+  geom_point()+
+  xlab("MPG in City")+
+  ylab("MPG on Highway")
+
+```
+
+#2
+What parameters to geom_jitter() control the amount of jittering?
+width and height
+```{r}
+?geom_jitter()
+```
+
+#3
+Compare and contrast geom_jitter() with geom_count().
+From Description:
+Count: Counts the number of observations at each location, then maps the count to point area. 
+Jitter: Adds a small amount of random variation to the location of each point.
+
+Compare and contrast 
+Both are useful when you have discrete data and overplotting.  Jitter randomly moved the points to stop overlapping - count counts the points ar a given coordinate and reflects that in the size of the point.  So for large datasets of discrete data where the point is exact it is useful - if the points are close but not exact Jitter is more useful for visualization.
+
+```{r}
+?geom_count()
+?mpg
+```
+#4
+What’s the default position adjustment for geom_boxplot()? 
+position_dodge
+
+
+Create a visualisation of the mpg dataset that demonstrates it.
+
+## No variable
+```{r}
+ggplot(data = mpg, mapping = aes(x=class,y=cty,fill=as.factor(cyl))) +
+geom_boxplot()
+```
+Using position=dodge looks same
+
+```{r}
+?geom_boxplot()
+ggplot(data = mpg, mapping = aes(x=class, y=cty,fill=as.factor(cyl))) +
+geom_boxplot(position='dodge')
+```
+Using position jittel looks different...  BTW dodge requires non-overlapping so year worked on x-axis but with warning.  Using position had an error so needed to use a categorical value.
+```{r}
+ggplot(data = mpg, mapping = aes(x=class, y=cty,fill=as.factor(cyl))) +
+geom_boxplot(position='jitter')
+```
+3.9.1 Exercises
+
+
+#2    What does labs() do? Read the documentation.
+Adds Lables and titles to charts and Graphs
+
+```{r}
+?labs()
+```
+
+#4 What does the plot below tell you about the relationship between city and highway mpg? 
+That both city driving and highway driving improve together.
+#Why is coord_fixed() important? 
+Makes sure the ratios on the x and y axis are fixed as one - in this case it will give an accurate picture if they were variable the relationship would not be accurate.
+
+#What does geom_abline() do?
+Adds a reference line to better annotate the graph
+
+```{r}
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  geom_abline() +
+  coord_fixed()
+```
+
+Section 4.4: 
+#1 Why does this code not work?
+
+my_variable <- 10
+my_varıable
+
+Because there is a typo las line needs to be my_variable not my_varıable
+
+corrected
+```{r}
+my_variable <- 10
+my_variable
+```
+
+
+#2 Tweak each of the following R commands so that they run correctly:
+Fixed typo 
+Fixe fliter to filter and addedd ===
+filter to diamonds instead of diamond ....
+
+```{r}
+library(tidyverse)
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ,y=hwy))
+
+
+filter(mpg, cyl == 8)
+filter(diamonds, carat > 3)
+
+```
+
+Section 5.2.4: all exercises. You will need to install the nycflights13 package and use the flights data. 
+Hint: to complete exercise #2 you only have to change the code from exercise #1.7.
+#1 Find all flights that
+        Had an arrival delay of two or more hours
+        Flew to Houston (IAH or HOU)
+        Were operated by United, American, or Delta
+        Departed in summer (July, August, and September)
+        Arrived more than two hours late, but didn’t leave late
+        Were delayed by at least an hour, but made up over 30 minutes in flight
+        Departed between midnight and 6am (inclusive)
+
+    
+```{r}
+library(nycflights13)
+
+glimpse(flights)
+
+```
+```{r}
+flights %>% 
+ filter(arr_delay > 120)
+```
+```{r}
+flights %>% 
+ filter(dest %in% c("IAH", "HOU"))
+```
+
+```{r}
+flights %>% 
+ filter(carrier %in% c("AA","UA","DL"))
+```
+```{r}
+flights %>% 
+ filter(month %in% c("7","8","9"))
+```
+```{r}
+flights %>% 
+ filter(month, !is.na(dep_delay), dep_delay <= 0, arr_delay > 120)
+```
+```{r}
+flights %>% 
+ filter(month, !is.na(dep_delay), dep_delay >= 60, dep_delay-arr_delay > 30)
+```
+```{r}
+flights %>% 
+ filter(month, dep_time <=600 | dep_time == 2400)
+```
+#2 Another useful dplyr filtering helper is between().What does it do? Can you use it to simplify the code needed to answer the previous challenges?
+
+It selects within a list like between 7 and 9 if we change the code from in to between would look like
+
+
+```{r}
+flights %>% 
+ filter(month, between(month, 7, 9))
+```
+
+
+#3 How many flights have a missing dep_time? What other variables are missing?
+8,225
+What might these rows represent? Cancelled flights...
+```{r}
+flights %>% 
+ filter(month, is.na(dep_time))
+```
+#4 Why is NA ^ 0 not missing? Why is NA | TRUE not missing? Why is FALSE & NA not missing? Can you figure out the general rule? (NA * 0 is a tricky counterexample!)
+Not sure what this is asking but if a value is not there is it NA as in missing value.  If there is a value in the field is isn not NA...
+
+
+
+
+5.4.1 Exercises
+
+#1  Brainstorm as many ways as possible to select dep_time, dep_delay, arr_time, and arr_delay from flights.
+Select each field:
+select(flights, dep_time, dep_delay, arr_time, arr_delay)
+select(flights, starts_with("dep"),starts_with("arr))
+
+```{r}
+library(nycflights13)
+?flights()
+library(tidyverse)
+
+```
+#2    What happens if you include the name of a variable multiple times in a select() call?
+It removed the duplicate
+```{r}
+library(nycflights13)
+
+select(flights, dep_time, arr_time, dep_time)
+```
+
+#3    What does the one_of() function do? Why might it be helpful in conjunction with this vector?
+
+    vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+    
+    It allows you to specify the variables within the select command in this case it wold me vars as in:
+    select(flights, one_of(vars))
+    
+    ```{r}
+library(nycflights13)
+   
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+select(flights,  one_of(vars))
+```
+
+#4    oes the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
+
+    select(flights, contains("TIME"))
+    
+    Yes thouht this would be case sensitive - weird that it is not ....
+    
+    Change to - select(flights, contains("TIME", ignore.case = FALSE))
+    
+```{r}
+library(nycflights13)
+
+select(flights, contains("TIME"))
+```
+
+Section 5.4.1: 
+all exercises

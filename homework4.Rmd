@@ -1,0 +1,93 @@
+---
+title: "Homework 4"
+author: "Kathleen Welch"
+date: "February 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Go to R for Data Science at http://r4ds.had.co.nz/index.html.
+
+Complete these Exercises:
+
+#Section 5.6.7: #2, #4, #5 and #6 only
+#2-a    Come up with another approach that will give you the same output as not_cancelled %>% count(dest) ...
+
+```{r}
+library(nycflights13)
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+not_cancelled %>% count(dest)
+```
+
+```{r}
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+not_cancelled %>% group_by(dest) %>%
+  summarize(n = n())
+
+```
+ 
+#2b... and not_cancelled %>% count(tailnum, wt = distance) (without using count()).
+
+```{r}
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+not_cancelled %>% count(tailnum, wt = distance)
+
+
+```
+```{r}
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+not_cancelled %>% group_by(tailnum) %>%
+summarise(n = sum(distance,na.rm = TRUE))
+```
+  
+#3  Our definition of cancelled flights (is.na(dep_delay) | is.na(arr_delay) ) is slightly suboptimal. Why? Which is the most important column?
+dep_delay - if the fligt is NA then the flight never took off.
+
+
+#4  Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
+
+```{r}
+
+cancelled <- flights %>% 
+  filter(is.na(dep_delay))
+cancelled %>% count(day)
+```
+
+```{r}
+delayed <- flights %>% 
+   filter(!is.na(dep_delay))
+delayed  %>% count(day)
+
+```
+
+  #6  Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights %>% group_by(carrier, dest) %>% summarise(n()))
+
+  #7  What does the sort argument to count() do. When might you use it?
+
+
+#Section 10.5: #1, #2, #3 and #6 only
+
+#Section 12.3.3: #2, #3 and #4 only
+
+#Section 12.4.3: #1 and #2 only
+
+
+Answer these questions:
+
+Follow these steps:
+- Download the baby_names.txt file from Canvas which is in the Homework 4 assignment section.
+- Load this file into R correctly and take a glimpse of the output.
+- Export this file as an rds file and call it ‘baby_names.rds’.
+- Reload the baby_names.rds file and take another glimpse.
+- Show all of your code and the output. There should be two data import lines of code, one data export line of code, and two glimpses of the data.

@@ -1,6 +1,8 @@
 ---
-title: "R Notebook"
+title: "(“COMPSCIX 415.2 Homework 5/Midterm"
 output: html_notebook
+Student:  Kathleen Welch
+Date: March 5, 2018
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
@@ -8,12 +10,174 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ```{r}
-plot(cars)
+library(tidyverse)
+?tidyverse
+
+```
+# 1
+Can you name which package is associated with each task below?
+Plotting -
+Data munging/wrangling -  dpylr
+Reshaping (speading and gathering) data - ggplot2  
+Importing/exporting data - readr
+
+#2. Now can you name two functions that you’ve used from each package that you listed above for these
+tasks?
+Plotting -
+Data munging/wrangling - select, filter, mutate
+Reshaping data - aes, geom_point
+Importing/exporting data (note that readRDS and saveRDS are base R functions) - read_delim, read_csv
+
+## R Basics (1.5 points)
+#1. Fix this code with the fewest number of changes possible so it works:
+Removed ! 
+```{r}
+My_data.name___is.too00ooLong <- c( 1 , 2 , 3 )
+
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+#2. Fix this code so it works:
+Changed to lower case c (synatx) added ' to end of data
+```{r}
+my_string <- c('has', 'an', 'error', 'in', 'it')
+```
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+#3. Look at the code below and comment on what happened to the values in the vector.
+They become string values 
+```{r}
+my_vector <- c(1, 2, '3', '4', 5)
+my_vector
+```
 
+##Data import/export (3 points)
+#1. Download the rail_trail.txt file from Canvas (in the Midterm Exam section here) and successfully
+import it into R. Prove that it was imported successfully by including your import code and taking a
+glimpse of the result.
+```{r}
+
+weather <- read_delim("/Users/kwelch/DataSciClass/Homework1/rail_trail.txt",delim = "|",col_names = TRUE)
+glimpse(weather)
+```
+
+#2. Export the file into an R-specific format and name it “rail_trail.rds”. Make sure you define the path
+
+correctly so that you know where it gets saved. Then reload the file. Include your export and import
+code and take another glimpse.
+Visualization (6 points)
+```{r}
+
+write_rds(weather,"/Users/kwelch/DataSciClass/Homework1/rail_trail.rds")
+
+weather2 <- read_rds("/Users/kwelch/DataSciClass/Homework1/rail_trail.rds")
+glimpse(weather2)
+
+```
+
+#1. Critique this graphic: give only three examples of what is wrong with this graphic. Be concise.
+It is hard to understand the message in the graph:
+None of the the apparently related circles add up to 100%
+There are three categories that use the same color - doesn't make sense.
+In all instances the yes and no are the same color and the big little circle doesn't really send a clear message.
+
+
+#2. Reproduce this graphic using the diamonds data set.
+```{r}
+ggplot(data = diamonds, mapping = aes(cut,carat,fill=color)) +
+geom_boxplot() +
+coord_flip()+
+xlab("CARAT OF DIAMOND") +
+ylab("CUT OF DIAMOND")
+
+```
+
+#3. The previous graphic is not very useful. We can make it much more useful by changing one thing about
+Could not reproduce graph but this on is more useful because it gives more detail 
+
+
+#1. Is this data “tidy”? If yes, leave it alone and go to the next problem. If no, make it tidy. Note: this
+
+No the data it is spreading not tidy it shoudl have Country, year, cases, popluation headers.
+
+
+```{r}
+library(tidyverse)
+
+table2
+t2a <- spread(table2, key = type, value = count)
+
+t2a
+
+
+
+```
+
+#2. Create a new column in the diamonds data set called price_per_carat that shows the price of each
+diamond per carat (hint: divide). Only show me the code, not the output.
+
+```{r}
+mutate(diamonds, price_per_carat = price/carat)
+```
+
+
+#3. For each cut of diamond in the diamonds data set, how many diamonds, and what proportion, have a
+#  price > 10000 and a carat < 1.5? 
+5222 over 10000
+4018 > 1.5 carat
+
+cut count
+-----------
+Fair	127			
+Good	309			
+Very Good	861			
+Premium	1509			
+Ideal	1212	
+
+cut  numc  prop
+---------------
+Fair	127	3%		
+Good	309	8%		
+Very Good	861	21%		
+Premium	1509	38%		
+Ideal	1212	30%
+
+There are several ways to get to an answer, but your solution must
+use the data wrangling verbs from the tidyverse in order to get credit.
+• Do the results make sense? Why?
+• Do we need to be wary of any of these numbers? 
+Yes
+Why?
+In this case they don't really tell us the carat or the quality just price and cut
+*** got the mutate idea help from stack overflow
+```{r}
+
+diamonds %>% filter(price>10000) %>%
+filter(carat > 1.5) %>% group_by(cut) %>% 
+summarise (numc=n()) %>%
+mutate(prop = paste0(round(100 * numc/sum(numc), 0), "%"))
+
+```
+
+EDA (6 points)
+#Take a look at the txhousing data set that is included with the ggplot2 package and answer these questions:
+```{r}
+glimpse(txhousing)
+
+```
+
+1. During what time period is this data from?
+
+2. How many cities are represented?
+3. Which city, month and year had the highest number of sales?
+4. What kind of relationship do you think exists between the number of listings and the number of sales?
+Check your assumption and show your work.
+5. What proportion of sales is missing for each city?
+6. Looking at only the cities and months with greater than 500 sales:
+• Are the distributions of the median sales price (column name median), when grouped by city,
+different? The same? Show your work.
+• Any cities that stand out that you’d want to investigate further?
+• Why might we want to filter out all cities and months with sales less than 500?
+Git and Github (1.5 points)
+To demonstrate your use of git and Github, at the top of your document put a hyperlink to your Github
+repository.
+Once you are finished with your midterm, commit your final changes with the comment

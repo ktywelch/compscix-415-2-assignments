@@ -161,22 +161,110 @@ mutate(prop = paste0(round(100 * numc/sum(numc), 0), "%"))
 EDA (6 points)
 #Take a look at the txhousing data set that is included with the ggplot2 package and answer these questions:
 ```{r}
-glimpse(txhousing)
-
+txhousing
+str(txhousing)
 ```
 
 1. During what time period is this data from?
+Jan. 2000 - July 2015
+```{r}
+library(ggplot2)
+
+txhousing$Date1 <- as.Date(paste(txhousing$year, txhousing$month), "%Y %m")
+ggplot(data=txhousing, aes(x=date, y=month)) +
+   geom_line() 
+ 
+```
 
 2. How many cities are represented?
+46
+
+
+```{r}
+
+txhousing$Date1 <- as.Date(paste(txhousing$year, txhousing$month, 1), "%Y %m %d")
+
+# getting city in legend but too much data
+ggplot(data=txhousing, aes(x=Date1, y=sales,color=city)) +
+theme(legend.position="top", legend.direction="horizontal") +
+   geom_point() 
+	
+tx
+  
+  
+```
 3. Which city, month and year had the highest number of sales?
+Houston, July 2015
+```{r}
+txhousing %>%
+  filter(sales >2500) %>%
+ggplot( aes(x=Date1, y=sales,color=city)) +
+theme(legend.position="top", legend.direction="horizontal") +
+   geom_point() 
+```
+
 4. What kind of relationship do you think exists between the number of listings and the number of sales?
+More listings means more sales
 Check your assumption and show your work.
+Not true some cities had no listings 
+```{r}
+txhousing %>% 
+  group_by(city) %>% 
+  summarise(totsales = sum(sales),totlistings = sum(listings)) %>%
+
+ggplot()  + 
+    geom_bar(aes(x=city, y=totsales),stat="identity", fill="blue")+
+    geom_point(aes(x=city, y=totlistings),color="red") +
+     theme(
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.text.y=element_blank())+
+        xlab("Cities") +
+        ylab("Sales to Listing")
+  
+```
+
+
 5. What proportion of sales is missing for each city?
+```{r}
+
+txhous1 <-  subset(txhousing, select=c(city,sales)) 
+txhous1 %>%
+  group_by(city) %>%
+  miss_var_summary() %>%
+  filter(n_miss>0) %>%
+  ggplot(aes(x=city,y=pct_miss))+
+  geom_point()+
+    theme(
+        axis.text.x= element_text(size = rel(1.5), angle = 90)
+    ) +
+  ylab("Percent Missing Sales")
+
+  
+```
+
 6. Looking at only the cities and months with greater than 500 sales:
+```{r}
+txhousing %>%
+  filter(sales >500) %>%
+ggplot( aes(x=Date1, y=sales,color=city)) +
+theme(legend.position="top", legend.direction="horizontal") +
+   geom_point() 
+```
 • Are the distributions of the median sales price (column name median), when grouped by city,
 different? The same? Show your work.
+```{r}
+txhousing %>%
+  filter(sales >500) %>%
+  group_by(city) %>%
+ggplot( aes(x=Date1, y=median,color=city)) +
+theme(legend.position="top", legend.direction="horizontal") +
+   geom_point() 
+```
 • Any cities that stand out that you’d want to investigate further?
+Yes El Paso
 • Why might we want to filter out all cities and months with sales less than 500?
+To see where they may be reasons sales are slow or to discover trends
 Git and Github (1.5 points)
 To demonstrate your use of git and Github, at the top of your document put a hyperlink to your Github
 repository.
